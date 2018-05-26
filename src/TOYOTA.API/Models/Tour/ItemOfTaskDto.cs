@@ -25,6 +25,7 @@ namespace TOYOTA.API.Models.Tour
         public DateTime? ResultFinishDate { get; set; }
         public ObservableCollection<CheckStandard> CSList { get; set; }
         public ObservableCollection<StandardPic> SPicList { get; set; }
+        public ObservableCollection<StandardAttachment> AttachmentList { get; set; }
         public ObservableCollection<PictureStandard> PStandardList { get; set; }
     }
     public class CheckStandard
@@ -45,6 +46,16 @@ namespace TOYOTA.API.Models.Tour
         public string Url { get; set; }
         public string PicType { get; set; }
         public int PicId { get; set; }
+    }
+    public class StandardAttachment
+    {
+        public int TPId { get; set; }
+        public int TIId { get; set; }
+        public int SeqNo { get; set; }
+        public string AttachmentName { get; set; }
+        public string Url { get; set; }
+        public string AttachmentType { get; set; }
+        public int AttachmentId { get; set; }
     }
     public class PictureStandard
     {

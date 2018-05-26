@@ -241,10 +241,12 @@ namespace TOYOTA.API.Service
                         var picList = planManys.Read<PicDto>();
                         var attachList = planManys.Read<AttachDto>();
                         var picdescList = planManys.Read<PicDescDto>();
+                        var attachmentList = planManys.Read<AttachmentDto>();
                         impPlanDetailDto.StandardList.AddRange(standardList);
                         impPlanDetailDto.PicList.AddRange(picList);
                         impPlanDetailDto.AttachList.AddRange(attachList);
                         impPlanDetailDto.PicDescList.AddRange(picdescList);
+                        impPlanDetailDto.AttachmentList.AddRange(attachmentList);
                         result = new APIResult { Body = CommonHelper.EncodeDto<ImpPlanDetailDto>(impPlanDetailDto), ResultCode = ResultType.Success, Msg = "" };
                     }
                     else

@@ -16,6 +16,7 @@ namespace TOYOTA.API.Models.Tour
         public int TPId { get; set; }
         public List<CheckStandard> CSList { get; set; }
         public List<StandardPic> SPicList { get; set; }
+        public List<StandardAttachment> AttachmentList { get; set; }
 
 
     }

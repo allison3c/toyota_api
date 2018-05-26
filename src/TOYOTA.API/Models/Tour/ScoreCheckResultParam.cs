@@ -11,6 +11,7 @@ namespace TOYOTA.API.Models.Tour
         public List<ScoreRegDto> ScoreLst { get; set; }
         public List<CheckResultRegDto> CheckResultLst { get; set; }
         public List<StandardPicRegDto> StandardPicLst { get; set; }
+        public List<StandardAttachmentRegDto> StandardAttachmentLst { get; set; }
         public List<PictureStandard> PicStandLst { get; set; }
         public int UserId { get; set; }
     }
@@ -42,6 +43,15 @@ namespace TOYOTA.API.Models.Tour
         public string Url { get; set; }
         public string PicName { get; set; }
         public string PicType { get; set; }
+        public string GRUD { get; set; }
+    }
+    public class StandardAttachmentRegDto
+    {
+        public int TPId { get; set; }
+        public int TIId { get; set; }
+        public string Url { get; set; }
+        public string AttachmentName { get; set; }
+        public string AttachmentType { get; set; }
         public string GRUD { get; set; }
     }
 }

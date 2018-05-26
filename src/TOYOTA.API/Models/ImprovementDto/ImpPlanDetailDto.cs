@@ -11,6 +11,7 @@ namespace TOYOTA.API.Models.ImprovementDto
             PicList = new List<PicDto>();
             AttachList = new List<AttachDto>();
             PicDescList = new List<PicDescDto>();
+            AttachmentList = new List<AttachmentDto>();
         }
         public string ImprovementCaption { get; set; }
         public string LostDescription { get; set; }
@@ -34,6 +35,7 @@ namespace TOYOTA.API.Models.ImprovementDto
         public List<PicDto> PicList { get; set; }
         public List<AttachDto> AttachList { get; set; }
         public List<PicDescDto> PicDescList { get; set; }
+        public List<AttachmentDto> AttachmentList { get; set; }
         public string PlanFinishDate { get; set; }
         public string ResultFinishDate { get; set; }
     }
@@ -61,5 +63,12 @@ namespace TOYOTA.API.Models.ImprovementDto
         public int SeqNo { get; set; }
         public string PicDesc { get; set; }
         public string Url { get; set; }
+    }
+    public class AttachmentDto
+    {
+        public int SeqNo { get; set; }
+        public string AttachmentName { get; set; }
+        public string Url { get; set; }
+        public string TypeName { get; set; }
     }
 }

@@ -10,6 +10,7 @@ namespace TOYOTA.API.Models.Tour
         public List<ScoreLDB> Score { get; set; }
         public List<CheckResultLDB> CheckResult { get; set; }
         public List<StandardPicLDB> StandardPic { get; set; }
+        public List<StandardAttachmentLDB> StandardAttachment { get; set; }
         public List<TaskOfPlanLDB> TaskOfPlan { get; set; }
         public List<CustImproveItemDB> CustImproveItem { get; set; }
 
@@ -51,6 +52,18 @@ namespace TOYOTA.API.Models.Tour
         public string DelChk { get; set; }
         public string Id { get; set; }
     }
+    public class StandardAttachmentLDB
+    {
+        public int? TPId { get; set; }
+        public int? TIId { get; set; }
+        public int? PSId { get; set; }
+        public string Url { get; set; }
+        public string AttachmentName { get; set; }
+        public string Type { get; set; }
+        public string DelChk { get; set; }
+        public string Id { get; set; }
+    }
+    
     public class TaskOfPlanLDB
     {
         public string TPCode { get; set; }

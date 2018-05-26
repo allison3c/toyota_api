@@ -155,17 +155,20 @@ namespace TOYOTA.API.Service
                     var r2 = list.ReadAsync().Result;
                     var r3 = list.ReadAsync().Result;
                     var r4 = list.ReadAsync().Result;
+                    var r5 = list.ReadAsync().Result;
 
                     ObservableCollection<ItemOfTaskDto> lst = JsonConvert.DeserializeObject<ObservableCollection<ItemOfTaskDto>>(JsonConvert.SerializeObject(r1));
                     ObservableCollection<CheckStandard> lst2 = JsonConvert.DeserializeObject<ObservableCollection<CheckStandard>>(JsonConvert.SerializeObject(r2));
                     ObservableCollection<StandardPic> lst3 = JsonConvert.DeserializeObject<ObservableCollection<StandardPic>>(JsonConvert.SerializeObject(r3));
                     ObservableCollection<PictureStandard> lst4 = JsonConvert.DeserializeObject<ObservableCollection<PictureStandard>>(JsonConvert.SerializeObject(r4));
+                    ObservableCollection<StandardAttachment> lst5 = JsonConvert.DeserializeObject<ObservableCollection<StandardAttachment>>(JsonConvert.SerializeObject(r5));
 
                     foreach (var item in lst)
                     {
                         item.CSList = new ObservableCollection<CheckStandard>();
                         item.SPicList = new ObservableCollection<StandardPic>();
                         item.PStandardList = new ObservableCollection<PictureStandard>();
+                        item.AttachmentList = new ObservableCollection<StandardAttachment>();
                         foreach (var i1 in lst2)
                         {
                             if (item.TPId == i1.TPId && item.TIId == i1.TIId && item.SeqNo == i1.SeqNo)
@@ -185,6 +188,13 @@ namespace TOYOTA.API.Service
                             if (item.TPId == i4.TPId && item.TIId == i4.TIId && item.SeqNo == i4.SeqNo)
                             {
                                 item.PStandardList.Add(i4);
+                            }
+                        }
+                        foreach (var i5 in lst5)
+                        {
+                            if (item.TPId == i5.TPId && item.TIId == i5.TIId && item.SeqNo == i5.SeqNo)
+                            {
+                                item.AttachmentList.Add(i5);
                             }
                         }
 
@@ -224,16 +234,20 @@ namespace TOYOTA.API.Service
                     var r1 = list.ReadAsync().Result;
                     var r2 = list.ReadAsync().Result;
                     var r3 = list.ReadAsync().Result;
+                    var r4 = list.ReadAsync().Result;
 
                     List<ItemInfoForScore> lst = JsonConvert.DeserializeObject<List<ItemInfoForScore>>(JsonConvert.SerializeObject(r1));
                     List<CheckStandard> lst2 = JsonConvert.DeserializeObject<List<CheckStandard>>(JsonConvert.SerializeObject(r2));
                     List<StandardPic> lst3 = JsonConvert.DeserializeObject<List<StandardPic>>(JsonConvert.SerializeObject(r3));
+                    List<StandardAttachment> lst4 = JsonConvert.DeserializeObject<List<StandardAttachment>>(JsonConvert.SerializeObject(r4));
                     foreach (var item in lst)
                     {
                         item.CSList = new List<CheckStandard>();
                         item.CSList.AddRange(lst2);
                         item.SPicList = new List<StandardPic>();
                         item.SPicList.AddRange(lst3);
+                        item.AttachmentList = new List<StandardAttachment>();
+                        item.AttachmentList.AddRange(lst4);
                     }
 
                     APIResult result = new APIResult { Body = CommonHelper.EncodeDto<ItemInfoForScore>(lst), ResultCode = ResultType.Success, Msg = "" };
@@ -253,7 +267,8 @@ namespace TOYOTA.API.Service
             {
                 string XmlScore = CommonHelper.Serializer(typeof(List<ScoreRegDto>), param.ScoreLst);
                 string XmlCheckResult = CommonHelper.Serializer(typeof(List<CheckResultRegDto>), param.CheckResultLst);
-                string XmlStandardPic = CommonHelper.Serializer(typeof(List<StandardPicRegDto>), param.StandardPicLst);
+                string XmlStandardPic = CommonHelper.Serializer(typeof(List<StandardPicRegDto>), param.StandardPicLst); 
+                string XmlStandardAttachment = CommonHelper.Serializer(typeof(List<StandardAttachmentRegDto>), param.StandardAttachmentLst); 
                 string XmlPictureStandard = CommonHelper.Serializer(typeof(List<PictureStandard>), param.PicStandLst);
                 string spName = @"up_RMMT_TOU_ScoreReg_C";
 
@@ -261,6 +276,7 @@ namespace TOYOTA.API.Service
                 dp.Add("@XmlScore", XmlScore, DbType.Xml);
                 dp.Add("@XmlCheckResult", XmlCheckResult, DbType.Xml);
                 dp.Add("@XmlStandardPic", XmlStandardPic, DbType.Xml);
+                dp.Add("@XmlStandardAttachment", XmlStandardAttachment, DbType.Xml);
                 dp.Add("@XmlPictureStandard", XmlPictureStandard, DbType.Xml);
                 dp.Add("@InUserId", param.UserId, DbType.Int32);
 
@@ -408,6 +424,7 @@ namespace TOYOTA.API.Service
                 string XmlScore = CommonHelper.Serializer(typeof(List<ScoreLDB>), param.Score);
                 string XmlCheckResult = CommonHelper.Serializer(typeof(List<CheckResultLDB>), param.CheckResult);
                 string XmlStandardPic = CommonHelper.Serializer(typeof(List<StandardPicLDB>), param.StandardPic);
+                string XmlStandardAttachment = CommonHelper.Serializer(typeof(List<StandardPicLDB>), param.StandardAttachment);
                 string XmlTaskOfPlan = CommonHelper.Serializer(typeof(List<TaskOfPlanLDB>), param.TaskOfPlan);
                 string XmlCustImproveItem = CommonHelper.Serializer(typeof(List<CustImproveItemDB>), param.CustImproveItem);
                 string spName = @"up_RMMT_TOU_LocalDBUpload_C";
@@ -416,6 +433,7 @@ namespace TOYOTA.API.Service
                 dp.Add("@XmlScore", XmlScore, DbType.Xml);
                 dp.Add("@XmlCheckResult", XmlCheckResult, DbType.Xml);
                 dp.Add("@XmlStandardPic", XmlStandardPic, DbType.Xml);
+                dp.Add("@XmlStandardAttachment", XmlStandardAttachment, DbType.Xml);
                 dp.Add("@XmlTaskOfPlan", XmlTaskOfPlan, DbType.Xml);
                 dp.Add("@XmlCustImproveItem", XmlCustImproveItem, DbType.Xml);
                 using (var conn = new SqlConnection(DapperContext.Current.SqlConnection))
