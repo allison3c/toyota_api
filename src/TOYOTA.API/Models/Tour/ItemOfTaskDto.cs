@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace TOYOTA.API.Models.Tour
 {
@@ -20,6 +17,10 @@ namespace TOYOTA.API.Models.Tour
         public string ScoreStandard { get; set; }
         public bool IsClicked { get; set; }
         public string Remarks { get; set; }
+
+        public int APId { get; set; }
+        public string AppealYN { get; set; }
+        public string AppealResult { get; set; }
 
         public DateTime? PlanFinishDate { get; set; }
         public DateTime? ResultFinishDate { get; set; }

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace TOYOTA.API.Models.PlanTaskMngDto
+﻿namespace TOYOTA.API.Models.PlanTaskMngDto
 {
     public class StatusDto
     {

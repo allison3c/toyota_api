@@ -52,6 +52,7 @@ namespace TOYOTA.API
             services.AddSingleton<IHomeMngService, HomeMngService>();
             services.AddSingleton<IStatisticService, StatisticService>();
             services.AddSingleton<IReportService, ReportService>();
+            services.AddSingleton<IAppealMngService, AppealMngService>();
             #endregion
 
             services.AddCors(options =>

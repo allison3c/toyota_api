@@ -19,6 +19,8 @@ namespace TOYOTA.API.Service
         Task<APIResult> SaveReportAttachment(SaveReportAttachdto param);
         Task<APIResult> UpdateAttachmentDownloadCnt(int id);
         Task<APIResult> GetPlansListForExcelDownload(string SDate, string EDate, string UserId, string DisId);
+        Task<APIResult> GetRegionByUserId(int inuserid, string usertype, string zonetype);
+        Task<APIResult> GetAreaByRegionId(int inuserid, int regionid, string usertype);
     }
     public class ReportService : IReportService
     {
@@ -144,5 +146,66 @@ namespace TOYOTA.API.Service
             }
         }
 
+        public async Task<APIResult> GetRegionByUserId(int inuserid, string usertype, string zonetype)
+        {
+            try
+            {
+                string spName = @"up_MBMS_REP_GetRegionByUserId_R";
+
+                DynamicParameters dp = new DynamicParameters();
+                dp.Add("@UserId", inuserid, DbType.Int32);
+                dp.Add("@UserType", usertype, DbType.String);
+                dp.Add("@ZoneType", zonetype, DbType.String);
+
+                using (var conn = new SqlConnection(DapperContext.Current.SqlConnection))
+                {
+                    conn.Open();
+
+                    IEnumerable<StatusDto> list = await conn.QueryAsync<StatusDto>(spName, dp, null, null, CommandType.StoredProcedure);
+                    string message = "";
+                    if (list.Count() == 0)
+                    {
+                        message = "没有数据";
+                    }
+                    APIResult result = new APIResult { Body = CommonHelper.EncodeDto<StatusDto>(list), ResultCode = ResultType.Success, Msg = message };
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+                return new APIResult { Body = "", ResultCode = ResultType.Failure, Msg = ex.Message };
+            }
+        }
+
+        public async Task<APIResult> GetAreaByRegionId(int inuserid, int regionid, string usertype)
+        {
+            try
+            {
+                string spName = @"up_MBMS_REP_GetAreaByRegionId_R";
+
+                DynamicParameters dp = new DynamicParameters();
+                dp.Add("@InUserId", inuserid, DbType.Int32);
+                dp.Add("@RegionId", regionid, DbType.Int32);
+                dp.Add("@UserType", usertype, DbType.String);
+
+                using (var conn = new SqlConnection(DapperContext.Current.SqlConnection))
+                {
+                    conn.Open();
+
+                    IEnumerable<StatusDto> list = await conn.QueryAsync<StatusDto>(spName, dp, null, null, CommandType.StoredProcedure);
+                    string message = "";
+                    if (list.Count() == 0)
+                    {
+                        message = "没有数据";
+                    }
+                    APIResult result = new APIResult { Body = CommonHelper.EncodeDto<StatusDto>(list), ResultCode = ResultType.Success, Msg = message };
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+                return new APIResult { Body = "", ResultCode = ResultType.Failure, Msg = ex.Message };
+            }
+        }
     }
 }

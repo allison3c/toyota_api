@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using TOYOTA.API.Service;
@@ -46,6 +43,19 @@ namespace TOYOTA.API.Controllers
         public Task<APIResult> GetPlansListForExcelDownload(string SDate, string EDate, string UserId, string DisId)
         {
             return _reportService.GetPlansListForExcelDownload(SDate, EDate, UserId, DisId);
+        }
+
+        [HttpGet]
+        [ActionName("GetRegion")]
+        public Task<APIResult> GetRegionByUserId(int inuserid, string usertype, string zonetype)
+        {
+            return _reportService.GetRegionByUserId(inuserid, usertype, zonetype);
+        }
+        [HttpGet]
+        [ActionName("GetArea")]
+        public Task<APIResult> GetAreaByRegionId(int inuserid, int regionid, string usertype)
+        {
+            return _reportService.GetAreaByRegionId(inuserid, regionid, usertype);
         }
     }
 }
