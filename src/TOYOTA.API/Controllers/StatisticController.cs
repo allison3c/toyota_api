@@ -62,15 +62,15 @@ namespace TOYOTA.API.Controllers
         // GET: api/values  查询区域经理巡查进度
         [HttpGet]
         [ActionName("GetPatrolData")]
-        public Task<APIResult> GetPatrolData(string SDate, string EDate, string Area,string Zone,string UserId)
+        public Task<APIResult> GetPatrolData(string SDate, string EDate, string Area, string Zone, string UserId)
         {
-            return _statisticService.GetPatrolData(SDate,EDate,Area,Zone,UserId);
+            return _statisticService.GetPatrolData(SDate, EDate, Area, Zone, UserId);
         }
 
         // GET: api/values  根据区域查询经销商
         [HttpGet]
         [ActionName("GetDistributorByAreaId")]
-        public Task<APIResult> GetDistributorByAreaId(string AreaId,string UserId,string DisName)
+        public Task<APIResult> GetDistributorByAreaId(string AreaId, string UserId, string DisName)
         {
             return _statisticService.GetDistributorByAreaId(AreaId, UserId, DisName);
         }
@@ -78,7 +78,7 @@ namespace TOYOTA.API.Controllers
         // GET: api/values  根据登录名查询有权限的经销商
         [HttpGet]
         [ActionName("GetDisListByUserId")]
-        public Task<APIResult> GetDisListByUserId( string UserId)
+        public Task<APIResult> GetDisListByUserId(string UserId)
         {
             return _statisticService.GetDisListByUserId(UserId);
         }
@@ -94,9 +94,9 @@ namespace TOYOTA.API.Controllers
         // GET: api/values   售后数据查询
         [HttpGet]
         [ActionName("GetAftersalesFigures")]
-        public Task<APIResult> GetAftersalesFigures(string DisId,string YearMonthCSS, string YearMonthCCM, string YearMonthB)
+        public Task<APIResult> GetAftersalesFigures(string DisId, string YearMonthCSS, string YearMonthCCM, string YearMonthB)
         {
-            return _statisticService.GetAftersalesFigures(DisId,YearMonthCSS,YearMonthCCM,YearMonthB);
+            return _statisticService.GetAftersalesFigures(DisId, YearMonthCSS, YearMonthCCM, YearMonthB);
         }
 
         // GET: api/values   售后数据查询(HighCharts)
@@ -128,7 +128,15 @@ namespace TOYOTA.API.Controllers
         public Task<APIResult> InsertAfterSalesDataByExcel([FromBody]ExcelAfterSalesDataParams param)
         {
 
-            return _statisticService.InsertAfterSalesDataByExcel(param.InUserId,param.AfterSalesData);
+            return _statisticService.InsertAfterSalesDataByExcel(param.InUserId, param.AfterSalesData);
+        }
+
+        // GET: api/values   查询未分配、计划已完成、结果已完成的经销商列表
+        [HttpGet]
+        [ActionName("GetImpCompleteDistributorCnt")]
+        public Task<APIResult> GetImpCompleteDistributorCnt(string sDate, string eDate, string completeType, int inUserId)
+        {
+            return _statisticService.GetImpCompleteDistributorCnt(sDate, eDate, completeType, inUserId);
         }
 
         // POST api/values

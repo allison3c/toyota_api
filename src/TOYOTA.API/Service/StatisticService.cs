@@ -28,13 +28,14 @@ namespace TOYOTA.API.Service
                                                 string status,
                                                 int inUserId);
         Task<APIResult> GetZoneByAreaId(string AreaId);
-        Task<APIResult> GetPatrolData(string SDate, string EDate, string Area, string Zone,string UserId);
-        Task<APIResult> GetDistributorByAreaId(string AreaId,string UserId, string DisName);
+        Task<APIResult> GetPatrolData(string SDate, string EDate, string Area, string Zone, string UserId);
+        Task<APIResult> GetDistributorByAreaId(string AreaId, string UserId, string DisName);
         Task<APIResult> GetDisListByUserId(string UserId);
         Task<APIResult> GetInfoByDisId(string DisId);
-        Task<APIResult> GetAftersalesFigures(string disId,string yearMonthCSS,string yearMonthCCM,string yearMonthB);
-        Task<APIResult> GetAftersalesFiguresForHighCharts(string disId,string year);
+        Task<APIResult> GetAftersalesFigures(string disId, string yearMonthCSS, string yearMonthCCM, string yearMonthB);
+        Task<APIResult> GetAftersalesFiguresForHighCharts(string disId, string year);
         Task<APIResult> InsertAfterSalesDataByExcel(string InUserId, List<ExcelAfterSalesData> AfterSalesData);
+        Task<APIResult> GetImpCompleteDistributorCnt(string sDate, string eDate, string completeType, int inUserId);
 
     }
     public class StatisticService : IStatisticService
@@ -42,7 +43,7 @@ namespace TOYOTA.API.Service
         public async Task<APIResult> GetAreaByUserId(string UserId)
         {
             string spName = @"up_RMMT_STA_GetAreaByUserId_R";
-            DynamicParameters dp = new DynamicParameters();            
+            DynamicParameters dp = new DynamicParameters();
             dp.Add("@UserId", UserId, DbType.Int32);
             using (var con = new SqlConnection(DapperContext.Current.SqlConnection))
             {
@@ -120,7 +121,7 @@ namespace TOYOTA.API.Service
                 }
             }
         }
-        public async Task<APIResult> GetPatrolData(string SDate, string EDate, string Area, string Zone,string UserId)
+        public async Task<APIResult> GetPatrolData(string SDate, string EDate, string Area, string Zone, string UserId)
         {
             string spName = @"up_RMMT_STA_GetAreaPatrolData_R";
             DynamicParameters dp = new DynamicParameters();
@@ -146,7 +147,7 @@ namespace TOYOTA.API.Service
             }
 
         }
-        public async Task<APIResult> GetDistributorByAreaId(string AreaId,string UserId, string DisName)
+        public async Task<APIResult> GetDistributorByAreaId(string AreaId, string UserId, string DisName)
         {
             string spName = @"up_RMMT_STA_GetDistributorByAreaId_R";
 
@@ -234,33 +235,44 @@ namespace TOYOTA.API.Service
                     {
                         Blist2.Add(new BusinessDto
                         {
-                            LTypeName = item.LTypeName                                                                            
-                            ,Actual = CommonHelper.FormatterString(item.Actual, 0,false)                                                                            
-                            ,Target = CommonHelper.FormatterString(item.Target, 0, false)                                                                            
-                            ,Rate = CommonHelper.FormatterString(item.Rate, 2,true)
+                            LTypeName = item.LTypeName
+                            ,
+                            Actual = CommonHelper.FormatterString(item.Actual, 0, false)
+                            ,
+                            Target = CommonHelper.FormatterString(item.Target, 0, false)
+                            ,
+                            Rate = CommonHelper.FormatterString(item.Rate, 2, true)
                         });
                         Blist2.Add(new BusinessDto
                         {
-                            LTypeName = "YTM"                                                                           
-                            ,Actual = CommonHelper.FormatterString(item.ActualYTM, 0,false)                                                                           
-                            ,Target = CommonHelper.FormatterString(item.TargetYTM, 0, false)                                                                           
-                            ,Rate = CommonHelper.FormatterString(item.RateYTM, 2, true)
+                            LTypeName = "YTM"
+                            ,
+                            Actual = CommonHelper.FormatterString(item.ActualYTM, 0, false)
+                            ,
+                            Target = CommonHelper.FormatterString(item.TargetYTM, 0, false)
+                            ,
+                            Rate = CommonHelper.FormatterString(item.RateYTM, 2, true)
                         });
                     }
                     var QList = afManys.Read<QualityDto>();
                     List<QualityDto> QList2 = new List<QualityDto>();
                     foreach (var item in QList)
                     {
-                        QList2.Add(new QualityDto() { LTypeName = item.LTypeName
-                                                                        , ScoreAndRank = CommonHelper.FormatterString(item.Score,2,false) + "/" + CommonHelper.FormatterString( item.Rank,0,false)
-                                                                        , AverageAndTotal = CommonHelper.FormatterString(item.Average,2,false) + "/" + CommonHelper.FormatterString(item.Total,0,false) });
+                        QList2.Add(new QualityDto()
+                        {
+                            LTypeName = item.LTypeName
+                                                                        ,
+                            ScoreAndRank = CommonHelper.FormatterString(item.Score, 2, false) + "/" + CommonHelper.FormatterString(item.Rank, 0, false)
+                                                                        ,
+                            AverageAndTotal = CommonHelper.FormatterString(item.Average, 2, false) + "/" + CommonHelper.FormatterString(item.Total, 0, false)
+                        });
                     }
 
                     var PList = afManys.Read<PartsStockDto>();
 
                     foreach (var item in PList)
                     {
-                        item.Target = CommonHelper.FormatterString(item.Target,2,false);
+                        item.Target = CommonHelper.FormatterString(item.Target, 2, false);
                         item.Actual = CommonHelper.FormatterString(item.Actual, 2, false);
                     }
                     var CSSYearTargetlist = afManys.Read<CSSYearTargetDto>();
@@ -286,7 +298,7 @@ namespace TOYOTA.API.Service
             string spName = @"up_RMMT_STA_GetAftersalesFiguresForHighCharts_R";
             DynamicParameters dp = new DynamicParameters();
             dp.Add("@DisId", Convert.ToInt32(disId));
-            dp.Add("@Year", year);          
+            dp.Add("@Year", year);
             using (var conn = new SqlConnection(DapperContext.Current.SqlConnection))
             {
                 conn.Open();
@@ -323,10 +335,10 @@ namespace TOYOTA.API.Service
         }
         public async Task<APIResult> InsertAfterSalesDataByExcel(string InUserId, List<ExcelAfterSalesData> AfterSalesData)
         {
-            string AfterSalesDataXML = CommonHelper.Serializer(typeof(List<ExcelAfterSalesData>), AfterSalesData);       
+            string AfterSalesDataXML = CommonHelper.Serializer(typeof(List<ExcelAfterSalesData>), AfterSalesData);
             string spName = @"up_RMMT_STA_InsertAfterSalesDataByExcel_C";
             DynamicParameters dp = new DynamicParameters();
-            dp.Add("@InUserId", InUserId, DbType.Int32);      
+            dp.Add("@InUserId", InUserId, DbType.Int32);
             dp.Add("@AfterSalesDataXML", AfterSalesDataXML, DbType.Xml);
             using (var conn = new SqlConnection(DapperContext.Current.SqlConnection))
             {
@@ -354,7 +366,29 @@ namespace TOYOTA.API.Service
 
         }
 
+        public async Task<APIResult> GetImpCompleteDistributorCnt(string sDate, string eDate, string completeType, int inUserId)
+        {
+            string spName = @"up_RMMT_STA_ImpCompleteDistributorCnt_R";
+            DynamicParameters dp = new DynamicParameters();
+            dp.Add("@SDate", sDate, DbType.String);
+            dp.Add("@EDate", eDate, DbType.String);
+            dp.Add("@CompleteType", completeType, DbType.String);
+            dp.Add("@InUserId", inUserId, DbType.Int32);
+            using (var con = new SqlConnection(DapperContext.Current.SqlConnection))
+            {
+                con.Open();
+                try
+                {
+                    IEnumerable<ImpCompletedDto> dto = await con.QueryAsync<ImpCompletedDto>(spName, dp, null, null, CommandType.StoredProcedure);
+                    APIResult result = new APIResult { Body = CommonHelper.EncodeDto<ImpCompletedDto>(dto), ResultCode = ResultType.Success, Msg = "" };
+                    return result;
+                }
+                catch (Exception ex)
+                {
 
-
+                    return new APIResult { Body = "", ResultCode = ResultType.Failure, Msg = ex.Message };
+                }
+            }
+        }
     }
 }
