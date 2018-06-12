@@ -27,7 +27,7 @@ namespace TOYOTA.API.Service
 
         Task<APIResult> GetNoticeDepartments();
 
-        Task<APIResult> GetDistributorListByUserId(int userId, string disCode, string disName);
+        Task<APIResult> GetDistributorListByUserId(int userId, int aDisId, string disCode, string disName);
 
         Task<APIResult> GetApprovalStatus();
 
@@ -194,12 +194,13 @@ namespace TOYOTA.API.Service
 
         }
 
-        public async Task<APIResult> GetDistributorListByUserId(int userId,string disCode, string disName)
+        public async Task<APIResult> GetDistributorListByUserId(int userId, int aDisId, string disCode, string disName)
         {
             string spName = @"up_RMMT_NOT_DistributorListByUserId_R";
 
             DynamicParameters dp = new DynamicParameters();
             dp.Add("@UserId", userId, DbType.Int32);
+            dp.Add("@ADisId", aDisId, DbType.Int32);
             dp.Add("@DisCode", disCode, DbType.String);
             dp.Add("@DisName", disName, DbType.String);
 
