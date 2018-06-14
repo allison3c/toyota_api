@@ -19,16 +19,16 @@ namespace TOYOTA.API.Controllers
 
         [HttpGet]
         [ActionName("GeImprovementItemFromScoreList")]
-        public async Task<IActionResult> GeImprovementItemFromScoreList(string itemName, string sDate, string eDate, int inUserId, string statusType, string status, int disId,int depId,int planId,string sourceType)
+        public async Task<IActionResult> GeImprovementItemFromScoreList(string itemName, string sDate, string eDate, int inUserId, string statusType, string status, int disId, int depId, int planId, string sourceType)
         {
-            var improveDtoList = await _improvementService.SearchImprovementItemFromScoreList(itemName, sDate, eDate, inUserId, statusType, status, disId, depId,planId, sourceType);
+            var improveDtoList = await _improvementService.SearchImprovementItemFromScoreList(itemName, sDate, eDate, inUserId, statusType, status, disId, depId, planId, sourceType);
             return Ok(improveDtoList);
         }
         [HttpGet]
         [ActionName("GetImpItemFromScore")]
         public async Task<IActionResult> GetImpItemFromScoreList(string sDate, string eDate, string tcKind, string sourceType, string itemName, string aStatus, string pStatus, string rStatus, string sDisId, string inUserId, string userType)
         {
-            var improveDtoList = await _improvementService.SearchImpItemFromScoreList(sDate,eDate,tcKind,sourceType,itemName,aStatus,pStatus,rStatus,sDisId,inUserId,userType);
+            var improveDtoList = await _improvementService.SearchImpItemFromScoreList(sDate, eDate, tcKind, sourceType, itemName, aStatus, pStatus, rStatus, sDisId, inUserId, userType);
             return Ok(improveDtoList);
         }
         [HttpPost]
@@ -63,6 +63,14 @@ namespace TOYOTA.API.Controllers
         public async Task<APIResult> GetAllTaskOfPlanForImp(int inUserId)
         {
             return await _improvementService.SearchAllTaskOfPlanForImp(inUserId);
+        }
+
+        [HttpGet]
+        [ActionName("GetScoreAndImprovementList")]
+        public async Task<IActionResult> GetScoreAndImprovementList(string taskTitle, string sDate, string eDate, int inUserId, string passYN, int rDisId, int aDisId, int disId, string sourceType)
+        {
+            var improveDtoList = await _improvementService.GetScoreAndImprovementList(taskTitle, sDate, eDate, inUserId, passYN, rDisId, aDisId, disId, sourceType);
+            return Ok(improveDtoList);
         }
     }
 }

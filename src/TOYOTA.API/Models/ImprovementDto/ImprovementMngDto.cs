@@ -31,5 +31,11 @@ namespace TOYOTA.API.Models.ImprovementDto
         public string SourceType { get; set; }
 	    public string SourceTypeName { get; set; }
         public bool AllocateYN { get; set; }
+
+        public int DisId { get; set; }
+        public string DisName { get; set; }
+        public string PassYN { get; set; }
+        public string StatusCode { get; set; }
+        public string StatusName { get; set; }
     }
 }

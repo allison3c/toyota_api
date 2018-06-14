@@ -68,9 +68,9 @@ namespace TOYOTA.API.Controllers
         }
         [HttpGet]
         [ActionName("GetDistributorListByUserId")]
-        public Task<APIResult> GetDistributorListByUserId(int UserId, int aDisId, string disCode = "%", string disName = "%")
+        public Task<APIResult> GetDistributorListByUserId(int UserId, int aDisId, string sDate, string eDate, string disCode = "%", string disName = "%")
         {
-            return _notifiApprovalService.GetDistributorListByUserId(UserId, aDisId, disCode, disName);
+            return _notifiApprovalService.GetDistributorListByUserId(UserId, aDisId, sDate, eDate, disCode, disName);
         }
         [HttpGet]
         [ActionName("GetApprovalNoticeList")]

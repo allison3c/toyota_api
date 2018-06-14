@@ -30,6 +30,7 @@ namespace TOYOTA.API.Service
         Task<APIResult> UpdateType(string UserId, List<CodeHiddenDto> list);
         Task<APIResult> GetAllDataForLocalDB(string UserId);
         Task<APIResult> SaveDealerList(ParamDealerDto paramDto);
+        Task<APIResult> GetOrgInfoHaveCompletedTask(string sDate, string eDate, string userId);
     }
     public class UsersService : IUsersService
     {
@@ -510,6 +511,41 @@ namespace TOYOTA.API.Service
                     }
                 }
                 return new APIResult { Body = CommonHelper.EncodeDto<DisInfoDto>(list), ResultCode = ResultType.Success, Msg = "" };
+            }
+        }
+
+        public async Task<APIResult> GetOrgInfoHaveCompletedTask(string sDate, string eDate, string userId)
+        {
+            string spName = @"up_RMMT_BAS_GetOrgInfoHaveCompletedTask_R";
+            DynamicParameters dp = new DynamicParameters();
+            dp.Add("@SDate", sDate, DbType.String);
+            dp.Add("@EDate", eDate, DbType.String);
+            dp.Add("@UserId", userId, DbType.Int32);
+
+            using (var conn = new SqlConnection(DapperContext.Current.SqlConnection))
+            {
+                conn.Open();
+                try
+                {
+                    var userManys = await conn.QueryMultipleAsync(spName, param: dp, commandType: System.Data.CommandType.StoredProcedure);
+                    var zionList = userManys.Read<ZionDto>();
+                    var areaList = userManys.Read<AreaDto>();
+                    var serverList = userManys.Read<ServerDto>();
+                    foreach (var item in areaList)
+                    {
+                        item.ServerList.AddRange(serverList.Where(s => s.AId == item.AId));
+                    }
+                    foreach (var item in zionList)
+                    {
+                        item.AreaList.AddRange(areaList.Where(a => a.QId == item.QId));
+                    }
+                    APIResult result = new APIResult { Body = CommonHelper.EncodeDto<ZionDto>(zionList), ResultCode = ResultType.Success, Msg = "" };
+                    return result;
+                }
+                catch (Exception ex)
+                {
+                    return new APIResult { Body = "", ResultCode = ResultType.Success, Msg = ex.Message }; ;
+                }
             }
         }
     }

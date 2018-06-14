@@ -84,13 +84,13 @@ namespace TOYOTA.API.Controllers
         [ActionName("GetTypeList")]
         public Task<APIResult> GetTypeList(string groupCode, string name, string useYN)
         {
-            return _usersService.GetTypeList(groupCode,name,useYN);
+            return _usersService.GetTypeList(groupCode, name, useYN);
         }
         [HttpPost]
         [ActionName("UpdateType")]
         public Task<APIResult> UpdateType([FromBody]UpdateTypeParam param)
         {
-            return _usersService.UpdateType(param.InUserId,param.list);
+            return _usersService.UpdateType(param.InUserId, param.list);
         }
 
         [HttpGet]
@@ -106,6 +106,11 @@ namespace TOYOTA.API.Controllers
         {
             return _usersService.SaveDealerList(paramDto);
         }
-
+        [HttpGet]
+        [ActionName("GetOrgInfoHaveCompletedTask")]
+        public Task<APIResult> GetOrgInfoHaveCompletedTask(string sDate, string eDate, string userId)
+        {
+            return _usersService.GetOrgInfoHaveCompletedTask(sDate, eDate, userId);
+        }
     }
 }

@@ -7,9 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
 using System.Threading.Tasks;
-using System.Xml.Linq;
 
 namespace TOYOTA.API.Service
 {
@@ -23,6 +21,8 @@ namespace TOYOTA.API.Service
 
         Task<APIResult> SaveImprovementItem(ImpApprovalParamDto paramDto);
         Task<APIResult> SearchAllTaskOfPlanForImp(int inUserId);
+
+        Task<APIResult> GetScoreAndImprovementList(string taskTitle, string sDate, string eDate, int inUserId, string passYN, int rDisId, int aDisId, int disId, string sourceType);
     }
     public class ImprovementService : IImprovementService
     {
@@ -57,9 +57,7 @@ namespace TOYOTA.API.Service
                 }
             }
         }
-
-
-
+        
         public async Task<APIResult> SearchImpItemFromScoreList(string sDate, string eDate, string tcKind, string sourceType, string itemName, string aStatus, string pStatus, string rStatus, string sDisId, string inUserId, string userType)
         {
             string spName = @"up_RMMT_IMP_ImpItemFromScoreList_R2";
@@ -289,6 +287,37 @@ namespace TOYOTA.API.Service
                 }
             }
         }
+
+        public async Task<APIResult> GetScoreAndImprovementList(string taskTitle, string sDate, string eDate, int inUserId, string passYN, int rDisId, int aDisId, int disId, string sourceType)
+        {
+            string spName = @"up_RMMT_IMP_ScoreAndImprovementList_R";
+            DynamicParameters dp = new DynamicParameters();
+            dp.Add("@TaskTitle", taskTitle == null ? "" : taskTitle);
+            dp.Add("@SDate", sDate);
+            dp.Add("@EDate", eDate);
+            dp.Add("@InUserId", inUserId);
+            dp.Add("@PassYN", passYN == null ? "" : passYN);
+            dp.Add("@RDisId", rDisId);
+            dp.Add("@ADisId", aDisId);
+            dp.Add("@DisId", disId);
+            dp.Add("@SourceType", sourceType == null ? "" : sourceType);
+
+            using (var conn = new SqlConnection(DapperContext.Current.SqlConnection))
+            {
+                conn.Open();
+                try
+                {
+                    IEnumerable<ImprovementMngDto> improvementMngResult = await conn.QueryAsync<ImprovementMngDto>(spName, dp, null, null, CommandType.StoredProcedure);
+                    APIResult result = new APIResult { Body = CommonHelper.EncodeDto<ImprovementMngDto>(improvementMngResult), ResultCode = ResultType.Success, Msg = "" };
+                    return result;
+                }
+                catch (Exception ex)
+                {
+                    return new APIResult { Body = "", ResultCode = ResultType.Failure, Msg = ex.Message };
+                }
+            }
+        }
+
     }
 
 }
